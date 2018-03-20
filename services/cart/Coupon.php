@@ -26,18 +26,18 @@ class Coupon extends Service
     protected $_coupon_code;   // 优惠卷码
     protected $_coupon_model;  // 优惠券model
     protected $_coupon_usage_model; // 优惠券使用次数记录model
-    
+
     protected $_couponModelName = '\fecshop\models\mysqldb\cart\Coupon';
     protected $_couponModel;
     protected $_couponUsageModelName = '\fecshop\models\mysqldb\cart\CouponUsage';
     protected $_couponUsageModel;
-    
+
     public function init(){
         parent::init();
-        list($this->_couponModelName,$this->_couponModel) = Yii::mapGet($this->_couponModelName);  
-        list($this->_couponUsageModelName,$this->_couponUsageModel) = Yii::mapGet($this->_couponUsageModelName);  
+        list($this->_couponModelName,$this->_couponModel) = Yii::mapGet($this->_couponModelName);
+        list($this->_couponUsageModelName,$this->_couponUsageModel) = Yii::mapGet($this->_couponUsageModelName);
     }
-    
+
     protected function actionGetPrimaryKey()
     {
         return 'coupon_id';
@@ -58,7 +58,7 @@ class Coupon extends Service
             return new $this->_couponModelName;
         }
     }
-    /** 
+    /**
      * @property $customer_id | Int
      * @property $coupon_id | Int
      * 通过customer_id 和 coupon_id得到 Coupon Usage Model.
@@ -310,7 +310,8 @@ class Coupon extends Service
                 if ($type == 1) { // 百分比
                     $base_discount_cost = $discount / 100 * $dc_price;
                 } elseif ($type == 2) { // 直接折扣
-                    $base_discount_cost = $dc_price - $discount;
+//                    $base_discount_cost = $dc_price - $discount;
+                    $base_discount_cost = $discount;
                 }
                 $curr_discount_cost = Yii::$service->page->currency->getCurrentCurrencyPrice($base_discount_cost);
             }
@@ -371,7 +372,7 @@ class Coupon extends Service
                             'coupon_id' => $c_model['coupon_id'],
                         ];
                         $result = $this->_couponModel->getDb()->createCommand($sql,$data)->execute();
-                        
+
                         return true;
                     }
                 }
@@ -441,7 +442,7 @@ class Coupon extends Service
                 $cancel_status = Yii::$service->cart->quote->cancelCartCoupon($coupon_code);
                 if ($up_status && $cancel_status) {
                     return true;
-                }  
+                }
             }
         }
     }
