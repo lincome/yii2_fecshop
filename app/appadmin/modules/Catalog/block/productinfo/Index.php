@@ -23,13 +23,13 @@ use Yii;
 class Index extends AppadminbaseBlock implements AppadminbaseBlockInterface
 {
     protected $_copyUrl;
-    
+
     /**
      * 为了可以使用rewriteMap，use 引入的文件统一采用下面的方式，通过Yii::mapGet()得到className和Object
      */
     protected $_productHelperName = '\fecshop\app\appadmin\modules\Catalog\helper\Product';
     protected $_productHelper;
-    
+
     /**
      * init param function ,execute in construct.
      */
@@ -38,13 +38,12 @@ class Index extends AppadminbaseBlock implements AppadminbaseBlockInterface
         /**
          * 通过Yii::mapGet() 得到重写后的class类名以及对象。Yii::mapGet是在文件@fecshop\yii\Yii.php中
          */
-        list($this->_productHelperName,$this->_productHelper) = Yii::mapGet($this->_productHelperName);  
-        
+        list($this->_productHelperName,$this->_productHelper) = Yii::mapGet($this->_productHelperName);
+
         /*
          * edit data url
          */
         $this->_editUrl = CUrl::getUrl('catalog/productinfo/manageredit');
-        $this->_batchUrl = CUrl::getUrl('catalog/productinfo/managerbatch');
         /*
          * delete data url
          */
@@ -190,7 +189,7 @@ class Index extends AppadminbaseBlock implements AppadminbaseBlockInterface
                 'width'            => '50',
                 'align'        => 'center',
             ],
-            
+
 
             [
                 'orderField'    => 'weight',

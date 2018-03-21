@@ -32,6 +32,9 @@ class Coupon extends Service
     protected $_couponUsageModelName = '\fecshop\models\mysqldb\cart\CouponUsage';
     protected $_couponUsageModel;
 
+    public $coupon_type_percent = 1;
+    public $coupon_type_direct  = 2;
+
     public function init(){
         parent::init();
         list($this->_couponModelName,$this->_couponModel) = Yii::mapGet($this->_couponModelName);
@@ -307,9 +310,9 @@ class Coupon extends Service
             $discount = $couponModel['discount'];
             //echo $conditions.'##'.$dc_price;;exit;
             if ($conditions <= $dc_price) {
-                if ($type == 1) { // 百分比
+                if ($type == $this->coupon_type_percent) { // 百分比
                     $base_discount_cost = $discount / 100 * $dc_price;
-                } elseif ($type == 2) { // 直接折扣
+                } elseif ($type == $this->coupon_type_direct) { // 直接折扣
 //                    $base_discount_cost = $dc_price - $discount;
                     $base_discount_cost = $discount;
                 }
@@ -406,19 +409,19 @@ class Coupon extends Service
                     // 在service中不要出现事务等操作。在调用层使用。
                     //$innerTransaction = Yii::$app->db->beginTransaction();
                     //try {
-                        $set_status = Yii::$service->cart->quote->setCartCoupon($coupon_code);
+                    $set_status = Yii::$service->cart->quote->setCartCoupon($coupon_code);
                     $up_status = $this->updateCouponUse('add');
                     if ($set_status && $up_status) {
                         //$innerTransaction->commit();
-                            return true;
+                        return true;
                     } else {
                         Yii::$service->helper->errors->add('add coupon fail');
                     }
-                        //Yii::$service->helper->errors->add('add coupon fail');
-                        //$innerTransaction->rollBack();
+                    //Yii::$service->helper->errors->add('add coupon fail');
+                    //$innerTransaction->rollBack();
                     //} catch (Exception $e) {
-                        //Yii::$service->helper->errors->add('add coupon fail');
-                        //$innerTransaction->rollBack();
+                    //Yii::$service->helper->errors->add('add coupon fail');
+                    //$innerTransaction->rollBack();
                     //}
                 } else {
                     Yii::$service->helper->errors->add('The coupon can not be used if the product amount in the shopping cart is less than {conditions} dollars', ['conditions' => $conditions]);
